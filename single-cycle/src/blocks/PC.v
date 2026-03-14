@@ -1,4 +1,10 @@
-module PC(input clk, input reset, input [31:0] PCNext, output [31:0] PC);
+module ProgramCounter(
+    input clk,
+    input reset,
+    input [31:0] PCNext,
+    output [31:0] PC
+);
+
     reg [31:0] currPc;
 
     always @(posedge clk) begin
