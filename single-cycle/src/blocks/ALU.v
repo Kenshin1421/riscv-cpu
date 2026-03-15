@@ -6,21 +6,24 @@ module ALU(
     output zero,
     output negative
 );
+    wire [31:0] res_sub;
+    assign res_sub = srcA - srcB;
+    wire overflow;
+    assign overflow = (srcA[31] != srcB[31]) && (res_sub[31] != srcA[31]);
 
     always @(*) begin
         res = 0;
         case(aluCtrl)
-            4'b0000: begin //Add
-                res = srcA + srcB;
-            end
-
-            4'b0001: begin //Sub 
-                res = srcA - srcB;
-            end
-
-            4'b0010: begin //SLL
-                res = srcA << srcB[4:0];
-            end
+            4'b0000: res = srcA + srcB; //Add
+            4'b0001: res = res_sub; //Sub
+            4'b0010: res = srcA << srcB[4:0]; //SLL
+            4'b0011: res = {31'b0, res_sub[31]^overflow}; //SLT
+            4'b0100: res = srcA < srcB; //SLTU
+            4'b0101: res = srcA^srcB; //XOR
+            4'b0110: res = srcA >> srcB[4:0]; //SRL
+            4'b0111: res = $signed(srcA) >>> srcB[4:0]; //SRA
+            4'b1000: res = srcA | srcB;
+            4'b1001: res = srcA & srcB;
         endcase 
     end
 
