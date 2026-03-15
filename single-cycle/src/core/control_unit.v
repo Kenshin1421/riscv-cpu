@@ -78,6 +78,28 @@ module control_unit(
                 endcase
 
             end
+
+            7'b1101111: begin //JAL
+                regWrite = 1'b1;
+                immSrc = 3'b100;
+                aluSrcB = 1'b0;
+                memWrite = 1'b0;
+                resSrc = 2'b10;
+                pcSrc = 2'b01;
+            end
+
+            7'b1100111: begin //JALR
+                regWrite = 1'b1;
+                immSrc = 3'b000;
+                aluSrcB = 1'b1;
+                memWrite = 1'b0;
+                resSrc = 2'b10;
+                pcSrc = 2'b10;
+            end
+
+            7'b0110111: begin //LUI
+                
+            end
         endcase
     end
 
@@ -116,6 +138,8 @@ module control_unit(
             7'b0100011: aluCtrl = 4'b0000; //Store - Add
 
             7'b1100011: aluCtrl = 4'b0001; //Branch - Sub
+
+            7'b1100111: aluCtrl = 4'b0000; //Jalr - Add
         endcase
     end
 

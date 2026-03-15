@@ -48,7 +48,7 @@ module datapath(
     adder_32bit pcPlusFour(.srcA(currInstAddress), .srcB(32'd4), .res(pcFour));
     adder_32bit pcBranch(.srcA(currInstAddress), .srcB(immediate), .res(branchOff));
     mux_2to1 aluB(.srcA(rs2), .srcB(immediate), .sel(aluSrcB), .out(aluInB));
-    mux_4to1 wbMux(.srcA(aluRes), .srcB(dataFormatted), .sel(resSrc), .out(writeBack));
+    mux_4to1 wbMux(.srcA(aluRes), .srcB(dataFormatted), .srcC(pcFour), .srcD(immediate), .sel(resSrc), .out(writeBack));
     mux_4to1 pcMux(.srcA(pcFour), .srcB(branchOff), .srcC(aluRes), .sel(pcSrc), .out(nextInstAddress));
 
     assign instOut = instruction;
