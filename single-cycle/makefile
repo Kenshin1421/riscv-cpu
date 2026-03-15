@@ -14,7 +14,17 @@ clean:
 build: compile run
 
 compile:
-	iverilog -o cpu_sim src/core/cpu.v src/core/datapath.v src/core/control_unit.v src/blocks/PC.v src/utils/adder_32bit.v src/memory/InstructionMemory.v src/blocks/ALU.v src/blocks/RegisterFile.v sim/cpu_tb_new.v
+	iverilog -o cpu_sim src/core/cpu.v \
+	src/core/datapath.v \
+	src/core/control_unit.v \
+	src/blocks/PC.v \
+	src/utils/adder_32bit.v \
+	src/utils/mux_2to1.v \
+	src/memory/InstructionMemory.v \
+	src/blocks/ALU.v \
+	src/blocks/RegisterFile.v \
+	src/blocks/ImmediateGenerator.v \
+	sim/cpu_tb_new.v
 run:
 	vvp cpu_sim
 wave:

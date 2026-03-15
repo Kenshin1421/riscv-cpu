@@ -16,7 +16,7 @@ module cpu_tb;
     end
 
 
-    always @(posedge clk) begin
-       $display("Time: %0t | clk edge detected", $time); 
-    end
+    //always @(posedge clk) begin
+    //   $display("Time: %0t | clk edge detected", $time); 
+    //end
 endmodule

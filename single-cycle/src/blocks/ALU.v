@@ -10,8 +10,16 @@ module ALU(
     always @(*) begin
         res = 0;
         case(aluCtrl)
-            4'b0000: begin
+            4'b0000: begin //Add
                 res = srcA + srcB;
+            end
+
+            4'b0001: begin //Sub 
+                res = srcA - srcB;
+            end
+
+            4'b0010: begin //SLL
+                res = srcA << srcB[4:0];
             end
         endcase 
     end
