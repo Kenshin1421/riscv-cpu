@@ -42,6 +42,14 @@ module control_unit(
                 memWrite = 1'b0;
                 resSrc = 2'b01;
             end
+
+            7'b0100011: begin //Store Instructions
+                regWrite = 1'b0;
+                immSrc = 3'b001;
+                aluSrcB = 1'b1;
+                memWrite = 1'b1;
+                resSrc = 2'b00; //Irrelevant as regWrite is not asserted.
+            end
         endcase
     end
 
@@ -76,6 +84,8 @@ module control_unit(
             end
 
             7'b0000011: aluCtrl = 4'b0000; //Load - Add
+            
+            7'b0100011: aluCtrl = 4'b0000; //Store - Add
         endcase
     end
 

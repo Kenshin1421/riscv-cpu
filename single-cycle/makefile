@@ -27,6 +27,7 @@ compile:
 	src/blocks/RegisterFile.v \
 	src/blocks/ImmediateGenerator.v \
 	src/blocks/LoadFormatter.v \
+	src/blocks/StoreFormatter.v \
 	sim/cpu_tb_new.v
 run:
 	vvp cpu_sim
