@@ -3,6 +3,7 @@ module cpu(input clk, input reset);
     wire [31:0] instruction;
     wire regWrite;
     wire memWrite;
+    wire aluSrcA;
     wire aluSrcB;
     wire [2:0] immSrc;
     wire [3:0] aluCtrl;
@@ -18,6 +19,7 @@ module cpu(input clk, input reset);
         .reset(reset),
         .regWrite(regWrite),
         .memWrite(memWrite),
+        .aluSrcA(aluSrcA),
         .aluSrcB(aluSrcB),
         .immSrc(immSrc),
         .aluCtrl(aluCtrl), 
@@ -40,6 +42,7 @@ module cpu(input clk, input reset);
         .borrow(borrow),
         .regWrite(regWrite),
         .memWrite(memWrite),
+        .aluSrcA(aluSrcA),
         .aluSrcB(aluSrcB),
         .immSrc(immSrc),
         .aluCtrl(aluCtrl),

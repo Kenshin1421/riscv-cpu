@@ -8,6 +8,7 @@ module control_unit(
     input borrow,
     output reg regWrite,
     output reg memWrite,
+    output reg aluSrcA,
     output reg aluSrcB,
     output reg [2:0] immSrc,
     output reg [3:0] aluCtrl,
@@ -19,6 +20,7 @@ module control_unit(
     always @(*) begin
         regWrite = 0;
         immSrc = 0;
+        aluSrcA = 0;
         aluSrcB = 0;
         memWrite = 0;
         resSrc = 0;
@@ -28,6 +30,7 @@ module control_unit(
             7'b0110011: begin //R-Type Instruction
                 regWrite = 1'b1;
                 immSrc = 3'b000; //Irrelevant , not actually used
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b0;
                 memWrite = 1'b0;
                 resSrc = 2'b00;
@@ -37,6 +40,7 @@ module control_unit(
             7'b0010011: begin //Computational I-Type Instruction
                 regWrite = 1'b1;
                 immSrc = 3'b000;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b1;
                 memWrite = 1'b0;
                 resSrc = 2'b00;
@@ -46,6 +50,7 @@ module control_unit(
             7'b0000011: begin //Load Instructions
                 regWrite = 1'b1;
                 immSrc = 3'b000;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b1;
                 memWrite = 1'b0;
                 resSrc = 2'b01;
@@ -55,6 +60,7 @@ module control_unit(
             7'b0100011: begin //Store Instructions
                 regWrite = 1'b0;
                 immSrc = 3'b001;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b1;
                 memWrite = 1'b1;
                 resSrc = 2'b00; //Irrelevant as regWrite is not asserted.
@@ -64,6 +70,7 @@ module control_unit(
             7'b1100011: begin
                 regWrite = 1'b0;
                 immSrc = 3'b010;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b0;
                 memWrite = 1'b0;
                 resSrc = 2'b00;
@@ -82,6 +89,7 @@ module control_unit(
             7'b1101111: begin //JAL
                 regWrite = 1'b1;
                 immSrc = 3'b100;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b0;
                 memWrite = 1'b0;
                 resSrc = 2'b10;
@@ -91,6 +99,7 @@ module control_unit(
             7'b1100111: begin //JALR
                 regWrite = 1'b1;
                 immSrc = 3'b000;
+                aluSrcA = 1'b0;
                 aluSrcB = 1'b1;
                 memWrite = 1'b0;
                 resSrc = 2'b10;
@@ -98,8 +107,26 @@ module control_unit(
             end
 
             7'b0110111: begin //LUI
-                
+                regWrite = 1'b1;
+                immSrc = 3'b011;
+                aluSrcA = 1'b0;
+                aluSrcB = 1'b1;
+                memWrite = 1'b0;
+                resSrc = 2'b11;
+                pcSrc = 2'b00;
             end
+
+            7'b0010111: begin //AUIPC
+                regWrite = 1'b1;
+                immSrc = 3'b011;
+                aluSrcA = 1'b1;
+                aluSrcB = 1'b1;
+                memWrite = 1'b0;
+                resSrc = 2'b00;
+                pcSrc = 2'b00;
+            end
+
+
         endcase
     end
 
@@ -140,6 +167,8 @@ module control_unit(
             7'b1100011: aluCtrl = 4'b0001; //Branch - Sub
 
             7'b1100111: aluCtrl = 4'b0000; //Jalr - Add
+
+            7'b0010111: aluCtrl = 4'b0000; //Auipc - Add
         endcase
     end
 
