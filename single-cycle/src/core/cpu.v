@@ -11,7 +11,7 @@ module cpu(input clk, input reset);
         .aluCtrl(aluCtrl), 
         .instOut(instruction)
     );
-
+    
     control_unit CU(
         .opcode(instruction[6:0]), 
         .funct3(instruction[14:12]), 

@@ -1,5 +1,6 @@
 module RegisterFile(
     input clk,
+    input reset,
     input regWrite,
     input [4:0] A1,
     input [4:0] A2,
@@ -15,8 +16,16 @@ module RegisterFile(
     assign RD2 = rFile[A2];
 
     always @(posedge clk) begin
-        if(regWrite & (A3 != 0))
+        if(regWrite && (A3 != 0) && !reset) begin
             rFile[A3] <= WD;
+
+            $display("Write: x%0d = %0d (0x%h) time=%0t", A3, WD, WD, $time);
+        end
+    end
+
+    initial begin
+        rFile[1] = 5;
+        rFile[2] = 7;
     end
 
 endmodule

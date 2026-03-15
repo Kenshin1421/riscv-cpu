@@ -1,0 +1,111 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib64/ivl/system.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib64/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib64/ivl/va_math.vpi";
+S_0x556fea2e1270 .scope module, "sanity_tb" "sanity_tb" 2 1;
+ .timescale 0 0;
+v0x556fea2f5750_0 .var "clk", 0 0;
+v0x556fea2f57f0_0 .var "reset", 0 0;
+E_0x556fea2df2b0 .event posedge, v0x556fea2f5400_0;
+S_0x556fea2e1400 .scope module, "DUT" "cpu" 2 10, 3 1 0, S_0x556fea2e1270;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "reset";
+v0x556fea2f5320_0 .net "aluCtrl", 3 0, v0x556fea2de3a0_0;  1 drivers
+v0x556fea2f5400_0 .net "clk", 0 0, v0x556fea2f5750_0;  1 drivers
+o0x7fe6e8a80228 .functor BUFZ 32, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v0x556fea2f54a0_0 .net "instruction", 31 0, o0x7fe6e8a80228;  0 drivers
+v0x556fea2f5560_0 .net "regWrite", 0 0, v0x556fea2f5170_0;  1 drivers
+v0x556fea2f5600_0 .net "reset", 0 0, v0x556fea2f57f0_0;  1 drivers
+L_0x556fea2f5890 .part o0x7fe6e8a80228, 0, 7;
+L_0x556fea2f5990 .part o0x7fe6e8a80228, 12, 3;
+L_0x556fea2f5ab0 .part o0x7fe6e8a80228, 25, 7;
+S_0x556fea2de1c0 .scope module, "CU" "control_unit" 3 15, 4 1 0, S_0x556fea2e1400;
+ .timescale 0 0;
+    .port_info 0 /INPUT 7 "opcode";
+    .port_info 1 /INPUT 3 "funct3";
+    .port_info 2 /INPUT 7 "funct7";
+    .port_info 3 /OUTPUT 1 "regWrite";
+    .port_info 4 /OUTPUT 4 "aluCtrl";
+v0x556fea2de3a0_0 .var "aluCtrl", 3 0;
+v0x556fea2f4ef0_0 .net "funct3", 2 0, L_0x556fea2f5990;  1 drivers
+v0x556fea2f4fd0_0 .net "funct7", 6 0, L_0x556fea2f5ab0;  1 drivers
+v0x556fea2f5090_0 .net "opcode", 6 0, L_0x556fea2f5890;  1 drivers
+v0x556fea2f5170_0 .var "regWrite", 0 0;
+E_0x556fea2df5e0 .event anyedge, v0x556fea2f5090_0, v0x556fea2f4fd0_0, v0x556fea2f4ef0_0;
+    .scope S_0x556fea2de1c0;
+T_0 ;
+    %wait E_0x556fea2df5e0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x556fea2f5170_0, 0, 1;
+    %pushi/vec4 0, 0, 4;
+    %store/vec4 v0x556fea2de3a0_0, 0, 4;
+    %load/vec4 v0x556fea2f5090_0;
+    %dup/vec4;
+    %pushi/vec4 51, 0, 7;
+    %cmp/u;
+    %jmp/1 T_0.0, 6;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v0x556fea2f4fd0_0;
+    %load/vec4 v0x556fea2f4ef0_0;
+    %concat/vec4; draw_concat_vec4
+    %dup/vec4;
+    %pushi/vec4 0, 0, 10;
+    %cmp/u;
+    %jmp/1 T_0.2, 6;
+    %jmp T_0.3;
+T_0.2 ;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x556fea2f5170_0, 0, 1;
+    %pushi/vec4 0, 0, 4;
+    %store/vec4 v0x556fea2de3a0_0, 0, 4;
+    %jmp T_0.3;
+T_0.3 ;
+    %pop/vec4 1;
+    %jmp T_0.1;
+T_0.1 ;
+    %pop/vec4 1;
+    %jmp T_0;
+    .thread T_0, $push;
+    .scope S_0x556fea2e1270;
+T_1 ;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x556fea2f5750_0, 0, 1;
+T_1.0 ;
+    %delay 5, 0;
+    %load/vec4 v0x556fea2f5750_0;
+    %inv;
+    %store/vec4 v0x556fea2f5750_0, 0, 1;
+    %jmp T_1.0;
+    %end;
+    .thread T_1;
+    .scope S_0x556fea2e1270;
+T_2 ;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x556fea2f57f0_0, 0, 1;
+    %delay 15, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x556fea2f57f0_0, 0, 1;
+    %delay 100, 0;
+    %vpi_call 2 15 "$finish" {0 0 0};
+    %end;
+    .thread T_2;
+    .scope S_0x556fea2e1270;
+T_3 ;
+    %wait E_0x556fea2df2b0;
+    %vpi_call 2 20 "$display", "Time: %0t | clk edge detected", $time {0 0 0};
+    %jmp T_3;
+    .thread T_3;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "sim/cpu_tb_new.v";
+    "src/core/cpu.v";
+    "src/core/control_unit.v";

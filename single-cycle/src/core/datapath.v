@@ -15,7 +15,7 @@ module datapath(
 
     ProgramCounter pc(.clk(clk), .reset(reset), .PCNext(nextInstAddress), .PC(currInstAddress));
     InstructionMemory instMem(.PC(currInstAddress), .instruction(instruction));
-    RegisterFile regFile(.clk(clk), .regWrite(regWrite), .A1(instruction[19:15]), .A2(instruction[24:20]), .A3(instruction[11:7]), .WD(writeBack), .RD1(rs1), .RD2(rs2));
+    RegisterFile regFile(.clk(clk), .reset(reset),.regWrite(regWrite), .A1(instruction[19:15]), .A2(instruction[24:20]), .A3(instruction[11:7]), .WD(writeBack), .RD1(rs1), .RD2(rs2));
 
     adder_32bit pcPlusFour(.srcA(currInstAddress), .srcB(32'd4), .res(nextInstAddress));
 
