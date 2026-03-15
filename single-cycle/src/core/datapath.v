@@ -14,6 +14,7 @@ module datapath(
     wire [31:0] nextInstAddress;
     wire [31:0] instruction;
     wire [31:0] data;
+    wire [31:0] dataFormatted;
     wire [31:0] rs1;
     wire [31:0] rs2;
     wire [31:0] immediate;
@@ -30,11 +31,12 @@ module datapath(
     //Main Computational Elements
     ALU alu(.srcA(rs1), .srcB(aluInB), .aluCtrl(aluCtrl), .res(aluRes));
     ImmediateGenerator immGen(.instr(instruction[31:7]), .immSrc(immSrc), .extendedImm(immediate));
+    loadFormatter lFormatter(.load(data), .loadCtrl(instruction[14:12]), .res2Lsb(aluRes[1:0]), .lFormatted(dataFormatted));
 
     //Path Helper Elements
     adder_32bit pcPlusFour(.srcA(currInstAddress), .srcB(32'd4), .res(nextInstAddress));
     mux_2to1 aluB(.srcA(rs2), .srcB(immediate), .sel(aluSrcB), .out(aluInB));
-    mux_4to1 wbMux(.srcA(aluRes), .srcB(data), .sel(resSrc), .out(writeBack));
+    mux_4to1 wbMux(.srcA(aluRes), .srcB(dataFormatted), .sel(resSrc), .out(writeBack));
 
     assign instOut = instruction;
 

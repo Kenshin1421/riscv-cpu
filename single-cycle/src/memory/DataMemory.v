@@ -14,7 +14,7 @@ module DataMemory(
     end
 
     initial begin
-        dataMemory[0] = 5;
-        dataMemory[1] = 42;
+        dataMemory[0] = 32'h11223344;
+        dataMemory[1] = 32'h55667788;
     end
 endmodule

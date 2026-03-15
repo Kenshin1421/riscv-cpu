@@ -26,6 +26,7 @@ compile:
 	src/blocks/ALU.v \
 	src/blocks/RegisterFile.v \
 	src/blocks/ImmediateGenerator.v \
+	src/blocks/LoadFormatter.v \
 	sim/cpu_tb_new.v
 run:
 	vvp cpu_sim
