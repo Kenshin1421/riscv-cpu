@@ -12,4 +12,9 @@ module DataMemory(
         if(memWrite)
             dataMemory[address[11:2]] <= WD;
     end
+
+    initial begin
+        dataMemory[0] = 5;
+        dataMemory[1] = 42;
+    end
 endmodule

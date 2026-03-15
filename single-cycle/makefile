@@ -20,7 +20,9 @@ compile:
 	src/blocks/PC.v \
 	src/utils/adder_32bit.v \
 	src/utils/mux_2to1.v \
+	src/utils/mux_4to1.v \
 	src/memory/InstructionMemory.v \
+	src/memory/DataMemory.v \
 	src/blocks/ALU.v \
 	src/blocks/RegisterFile.v \
 	src/blocks/ImmediateGenerator.v \
