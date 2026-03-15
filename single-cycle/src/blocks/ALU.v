@@ -4,12 +4,12 @@ module ALU(
     input [3:0] aluCtrl,
     output reg [31:0] res,
     output zero,
-    output negative
+    output negative,
+    output overflow,
+    output borrow
 );
     wire [31:0] res_sub;
     assign res_sub = srcA - srcB;
-    wire overflow;
-    assign overflow = (srcA[31] != srcB[31]) && (res_sub[31] != srcA[31]);
 
     always @(*) begin
         res = 0;
@@ -29,5 +29,7 @@ module ALU(
 
     assign zero = (res == 0);
     assign negative = res[31];
+    assign overflow = (srcA[31] != srcB[31]) && (res_sub[31] != srcA[31]);
+    assign borrow = srcA < srcB; 
 
 endmodule

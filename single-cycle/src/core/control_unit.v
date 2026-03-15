@@ -2,12 +2,17 @@ module control_unit(
     input [6:0] opcode,
     input [2:0] funct3,
     input [6:0] funct7,
+    input zero,
+    input negative,
+    input overflow,
+    input borrow,
     output reg regWrite,
     output reg memWrite,
     output reg aluSrcB,
     output reg [2:0] immSrc,
     output reg [3:0] aluCtrl,
-    output reg [1:0] resSrc
+    output reg [1:0] resSrc,
+    output reg [1:0] pcSrc
 );
 
     //Main decoder
@@ -17,6 +22,7 @@ module control_unit(
         aluSrcB = 0;
         memWrite = 0;
         resSrc = 0;
+        pcSrc = 0;
 
         case(opcode)
             7'b0110011: begin //R-Type Instruction
@@ -25,6 +31,7 @@ module control_unit(
                 aluSrcB = 1'b0;
                 memWrite = 1'b0;
                 resSrc = 2'b00;
+                pcSrc = 2'b00;
             end
 
             7'b0010011: begin //Computational I-Type Instruction
@@ -33,6 +40,7 @@ module control_unit(
                 aluSrcB = 1'b1;
                 memWrite = 1'b0;
                 resSrc = 2'b00;
+                pcSrc = 2'b00;
             end
 
             7'b0000011: begin //Load Instructions
@@ -41,6 +49,7 @@ module control_unit(
                 aluSrcB = 1'b1;
                 memWrite = 1'b0;
                 resSrc = 2'b01;
+                pcSrc = 2'b00;
             end
 
             7'b0100011: begin //Store Instructions
@@ -49,6 +58,25 @@ module control_unit(
                 aluSrcB = 1'b1;
                 memWrite = 1'b1;
                 resSrc = 2'b00; //Irrelevant as regWrite is not asserted.
+                pcSrc = 2'b00;
+            end
+
+            7'b1100011: begin
+                regWrite = 1'b0;
+                immSrc = 3'b010;
+                aluSrcB = 1'b0;
+                memWrite = 1'b0;
+                resSrc = 2'b00;
+
+                case(funct3)
+                    3'b000: pcSrc = (zero)? 2'b01:2'b00; //BEQ
+                    3'b001: pcSrc = (!zero)? 2'b01:2'b00; //BNE
+                    3'b100: pcSrc = (negative^overflow)? 2'b01:2'b00; //BLT
+                    3'b101: pcSrc = (!(negative^overflow))? 2'b01:2'b00;
+                    3'b110: pcSrc = (borrow)? 2'b01:2'b00;
+                    3'b111: pcSrc = (!borrow)? 2'b01:2'b00;
+                endcase
+
             end
         endcase
     end
@@ -86,6 +114,8 @@ module control_unit(
             7'b0000011: aluCtrl = 4'b0000; //Load - Add
             
             7'b0100011: aluCtrl = 4'b0000; //Store - Add
+
+            7'b1100011: aluCtrl = 4'b0001; //Branch - Sub
         endcase
     end
 

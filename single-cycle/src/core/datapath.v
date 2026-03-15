@@ -7,11 +7,18 @@ module datapath(
     input [2:0] immSrc,
     input [3:0] aluCtrl,
     input [1:0] resSrc,
-    output [31:0] instOut
+    input [1:0] pcSrc,
+    output [31:0] instOut,
+    output zero,
+    output negative,
+    output overflow,
+    output borrow
 );
 
     wire [31:0] currInstAddress;
     wire [31:0] nextInstAddress;
+    wire [31:0] pcFour;
+    wire [31:0] branchOff;
     wire [31:0] instruction;
     wire [31:0] data;
     wire [31:0] dataFormatted;
@@ -32,15 +39,17 @@ module datapath(
     DataMemory dataMem(.clk(clk), .memWrite(memWrite), .address(aluRes), .byteMask(byteMask), .WD(storeFormatted), .RD(data));
 
     //Main Computational Elements
-    ALU alu(.srcA(rs1), .srcB(aluInB), .aluCtrl(aluCtrl), .res(aluRes));
+    ALU alu(.srcA(rs1), .srcB(aluInB), .aluCtrl(aluCtrl), .res(aluRes), .zero(zero), .negative(negative), .overflow(overflow), .borrow(borrow));
     ImmediateGenerator immGen(.instr(instruction[31:7]), .immSrc(immSrc), .extendedImm(immediate));
     storeFormatter sFormatter(.store(rs2), .storeCtrl(instruction[14:12]), .res2Lsb(aluRes[1:0]), .sFormatted(storeFormatted), .byteMask(byteMask));
     loadFormatter lFormatter(.load(data), .loadCtrl(instruction[14:12]), .res2Lsb(aluRes[1:0]), .lFormatted(dataFormatted));
 
     //Path Helper Elements
-    adder_32bit pcPlusFour(.srcA(currInstAddress), .srcB(32'd4), .res(nextInstAddress));
+    adder_32bit pcPlusFour(.srcA(currInstAddress), .srcB(32'd4), .res(pcFour));
+    adder_32bit pcBranch(.srcA(currInstAddress), .srcB(immediate), .res(branchOff));
     mux_2to1 aluB(.srcA(rs2), .srcB(immediate), .sel(aluSrcB), .out(aluInB));
     mux_4to1 wbMux(.srcA(aluRes), .srcB(dataFormatted), .sel(resSrc), .out(writeBack));
+    mux_4to1 pcMux(.srcA(pcFour), .srcB(branchOff), .srcC(aluRes), .sel(pcSrc), .out(nextInstAddress));
 
     assign instOut = instruction;
 
