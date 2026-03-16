@@ -1,0 +1,39 @@
+{
+  "creator": "Yosys 0.63+89 (git sha1 de99d67bb, clang++ 18.1.8 -fPIC -O3)",
+  "modules": {
+    "cpu": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "src/core/cpu.v:1.1-52.10"
+      },
+      "ports": {
+        "clk": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "reset": {
+          "direction": "input",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+      },
+      "netnames": {
+        "clk": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "src/core/cpu.v:1.18-1.21"
+          }
+        },
+        "reset": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "src/core/cpu.v:1.29-1.34"
+          }
+        }
+      }
+    }
+  }
+}

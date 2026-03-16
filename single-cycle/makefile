@@ -1,7 +1,7 @@
 sim: obj bin hex clean
 
 obj:
-	riscv64-linux-gnu-as -march=rv32i sim/test.s -o sim/test.o
+	riscv64-linux-gnu-as -march=rv32i sim/extra/test.s -o sim/test.o
 bin:
 	riscv64-linux-gnu-objcopy -O binary sim/test.o sim/test.bin
 hex:
@@ -28,7 +28,7 @@ compile:
 	src/blocks/ImmediateGenerator.v \
 	src/blocks/LoadFormatter.v \
 	src/blocks/StoreFormatter.v \
-	sim/cpu_tb_new.v
+	sim/cpu_tb.v
 run:
 	vvp cpu_sim
 wave:
