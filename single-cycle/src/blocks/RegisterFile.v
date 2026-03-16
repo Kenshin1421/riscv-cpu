@@ -19,7 +19,7 @@ module RegisterFile(
         if(regWrite && (A3 != 0) && !reset) begin
             rFile[A3] <= WD;
 
-            $display("Write: x%0d = %0d (0x%h) time=%0t", A3, WD, WD, $time);
+            //$display("Write: x%0d = %0d (0x%h) time=%0t", A3, WD, WD, $time);
         end
     end
 

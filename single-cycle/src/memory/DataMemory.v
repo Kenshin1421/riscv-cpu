@@ -11,6 +11,8 @@ module DataMemory(
 
     always @(posedge clk) begin
         if(memWrite) begin
+            //$display("MEM WRITE: addr=%h data=%h" , address, WD);
+
             if(byteMask[0])
                 dataMemory[address[11:2]][7:0] <= WD[7:0];
             if(byteMask[1])
@@ -22,8 +24,4 @@ module DataMemory(
         end
     end
 
-    initial begin
-        dataMemory[0] = 32'h11223344;
-        dataMemory[1] = 32'h55667788;
-    end
 endmodule

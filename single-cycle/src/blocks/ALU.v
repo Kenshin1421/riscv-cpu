@@ -22,8 +22,8 @@ module ALU(
             4'b0101: res = srcA^srcB; //XOR
             4'b0110: res = srcA >> srcB[4:0]; //SRL
             4'b0111: res = $signed(srcA) >>> srcB[4:0]; //SRA
-            4'b1000: res = srcA | srcB;
-            4'b1001: res = srcA & srcB;
+            4'b1000: res = srcA | srcB;  //OR
+            4'b1001: res = srcA & srcB; //AND
         endcase 
     end
 
